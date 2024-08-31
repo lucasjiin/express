@@ -4,7 +4,7 @@
 import { IUserDto } from '../dto/user/UserDto';
 
 class UserRepository {
-    createUser(_user: IUserDto): IUserDto {
+    createUser(/* _user: IUserDto */): IUserDto {
         return {
             id: 'test123',
             email: 'test123@gmail.com',

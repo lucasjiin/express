@@ -28,7 +28,8 @@ This project is a template for using Express. It is implemented using a class-ba
 - **express-validator**: Middleware for validating and sanitizing request data
 - **helmet**: Security middleware for Express to set various HTTP headers
 - **dotenv**: Loads environment variables from a `.env` file into `process.env`
-- **winston**: Logging
+- **cluster**: Used for load balancing across multiple CPU cores
+- **winston, morgan**: Logging
 
 ## Usage
 
@@ -60,4 +61,23 @@ yarn add -D tsc-watch
     "format": "prettier --write .",
     "api-docs": "swagger-cli bundle docs/openapi.yaml --outfile ./docs/swagger.yaml --type yaml --verbose"
 }
+```
+
+## Using PM2 for Clustering
+
+To run the application in a cluster using PM2, follow these steps:
+
+### 1. Install PM2
+```bash
+npm install -g pm2
+```
+
+### 2. Start the application with PM2
+```bash
+yarn build && yarn start:pm2
+```
+
+### 3. Delete all PM2 instances
+```bash
+pm2 delete all
 ```

@@ -9,9 +9,14 @@ import helmet from 'helmet';
 import path from 'path';
 // import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './docs/swagger.json';
+import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorHandler';
 import UserRoutes from './routes/UserRoutes';
 import Log from './utils/Log';
+
+const LOG_TAG = 'App';
+const morganFormat =
+    ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] :referrer :user-agent - :response-time ms';
 
 class App {
     private static instance: App | null = null;
@@ -28,6 +33,15 @@ class App {
     }
 
     private initializeMiddleware() {
+        this.app.use(
+            morgan(morganFormat, {
+                stream: {
+                    write: (message) => {
+                        Log.info(LOG_TAG, message);
+                    },
+                },
+            }),
+        );
         this.app.use(cors());
         this.app.use(helmet());
         this.app.use(express.json());
@@ -59,7 +73,7 @@ class App {
 
     listen() {
         this.app.listen(App.PORT, () => {
-            Log.info(`listening on port ${App.PORT}`);
+            Log.info(LOG_TAG, `listening on port ${App.PORT}`);
         });
     }
 }

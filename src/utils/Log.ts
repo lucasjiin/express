@@ -14,8 +14,8 @@ const { Console, DailyRotateFile } = winston.transports;
  */
 class Log {
     private static LOG_DIR = path.join(__dirname, '../../logs');
-    private static format = printf(({ level, message, label, timestamp }) => {
-        return `${timestamp} [${level}]${message}`;
+    private static format = printf(({ level, message, timestamp }) => {
+        return `${timestamp} [${[process.pid]}][${level}]${message}`;
     });
     private static logger = winston.createLogger({
         format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), this.format),
