@@ -6,7 +6,7 @@
  * @type {import("prettier").Config}
  */
 const config = {
-    plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-prisma'],
+    plugins: ['prettier-plugin-prisma'],
     singleQuote: true,
     trailingComma: 'all',
     tabWidth: 4,

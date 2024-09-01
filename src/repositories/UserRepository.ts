@@ -1,20 +1,36 @@
 /**
  *
  */
-import { IUserDto } from '../dto/user/UserDto';
+import { Prisma, Role } from '../../prisma/client';
+import { prisma } from './connections';
 
 class UserRepository {
-    createUser(/* _user: IUserDto */): IUserDto {
-        return {
-            id: 'test123',
-            email: 'test123@gmail.com',
-        };
+    prisma = prisma;
+
+    async createUser(user: Prisma.UserCreateInput) {
+        const { name, password, email } = user;
+
+        try {
+            await prisma.user.create({
+                data: { name, email, password },
+            });
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    return 'this email is already registered.';
+                }
+            }
+            return null;
+        }
+
+        return { name, email, password };
     }
 
-    getUser(): IUserDto {
+    getUser() {
         return {
-            id: 'test123',
+            name: 'test123',
             email: 'test123@gmail.com',
+            role: Role.USER,
         };
     }
 }

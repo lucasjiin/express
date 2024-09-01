@@ -9,10 +9,11 @@
         "start:pm2": "pm2 flush && sleep 1 && pm2 delete all; pm2 start -i max dist/main.js",
         "clean": "rm -rf ./dist",
         "lint": "eslint \"src/**/*.ts\"",
-        "format": "prettier --write .",
+        "format": "prettier --config prettier.config.cli.mjs --write .",
         "api-docs": "swagger-cli bundle docs/openapi.yaml --outfile ./docs/swagger.yaml --type yaml --verbose"
     },
     "dependencies": {
+        "@prisma/client": "5.19.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
@@ -45,6 +46,7 @@
         "prettier": "^3.3.3",
         "prettier-plugin-organize-imports": "^4.0.0",
         "prettier-plugin-prisma": "^5.0.0",
+        "prisma": "^5.19.0",
         "typescript": "^5.5.4",
         "typescript-eslint": "^8.3.0"
     }

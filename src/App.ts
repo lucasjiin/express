@@ -28,11 +28,10 @@ class App {
     private userRoutes = new UserRoutes();
 
     private constructor() {
-        this.initializeMiddleware();
-        this.initializeRoutes();
+        this.initialize();
     }
 
-    private initializeMiddleware() {
+    private initialize() {
         this.app.use(
             morgan(morganFormat, {
                 stream: {
@@ -57,9 +56,6 @@ class App {
         this.app.use('/', express.static(path.join(__dirname, '../public')));
         // this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
         this.app.use(UserRoutes.PREFIX_PAT, this.userRoutes.getRouter());
-    }
-
-    private initializeRoutes() {
         this.app.use(errorHandler());
     }
 
