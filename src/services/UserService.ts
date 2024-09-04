@@ -6,15 +6,15 @@ import UserRepository from '../repositories/UserRepository';
 import * as bcrypt from 'bcryptjs';
 
 class UserService {
-    async createUser(user: Prisma.UserCreateInput) {
+    async createUser(input: Prisma.UserCreateInput) {
         const salt = await bcrypt.genSalt();
-        user.password = await bcrypt.hash(user.password, salt);
-
-        return UserRepository.createUser(user);
+        input.password = await bcrypt.hash(input.password, salt);
+        // await bcrypt.compare(password, user.password)
+        return await UserRepository.createUser(input);
     }
 
-    getUser() {
-        return UserRepository.getUser();
+    getUser(name: string) {
+        return UserRepository.getUser({ name });
     }
 }
 

@@ -1,23 +1,37 @@
 /**
  * UserResolver.ts
  */
-
 import { GraphQLError } from 'graphql';
-import { QueryResolvers, Resolvers, Role, User } from '../../../graphql/resolvers';
+import {
+    Maybe,
+    QueryResolvers,
+    QueryUserArgs,
+    RequireFields,
+    Resolver,
+    Resolvers,
+    ResolverTypeWrapper,
+    Role,
+    User,
+} from '../../../graphql/resolvers';
 import UserRepository from '../../repositories/UserRepository';
 
 class UserQueryResolver implements QueryResolvers {
-    async user(): Promise<User> {
-        const user = await UserRepository.getUser();
+    user: Resolver<
+        Maybe<ResolverTypeWrapper<User>>,
+        Record<string, never>,
+        any,
+        RequireFields<QueryUserArgs, 'name'>
+    > = async (_parent, args /* , _context, _info */) => {
+        const { user, error } = await UserRepository.getUser({ name: args.name });
 
-        if (user === null) {
-            const error = new GraphQLError('internal server error', {
+        if (error) {
+            const gqlerror = new GraphQLError('internal server error', {
                 extensions: {
                     code: 500,
                 },
             });
 
-            throw error;
+            throw gqlerror;
         }
 
         return {
@@ -25,11 +39,11 @@ class UserQueryResolver implements QueryResolvers {
             email: user?.email,
             role: user?.role as Role,
         };
-    }
+    };
 }
 
 class UserResolver implements Resolvers {
-    Query = new UserQueryResolver();
+    Query: QueryResolvers = new UserQueryResolver();
 }
 
 export default UserResolver;

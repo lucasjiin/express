@@ -2,39 +2,32 @@
  *
  */
 import { Prisma, Role } from '../../prisma/client';
+import Log from '../utils/Log';
 import { prisma } from './connections';
 
 class UserRepository {
-    static async createUser(user: Prisma.UserCreateInput) {
-        const { name, password, email } = user;
+    static async createUser(input: Prisma.UserCreateInput) {
+        const { name, password, email } = input;
 
         try {
-            await prisma.user.create({
+            const user = await prisma.user.create({
                 data: { name, email, password },
             });
-        } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2002') {
-                    return 'this email is already registered.';
-                }
-            } else {
-                return null;
-            }
-        }
 
-        return { name, email, role: Role.USER };
+            return { user };
+        } catch (error: any) {
+            Log.error(error.toString());
+            return { error };
+        }
     }
 
-    static async getUser() {
+    static async getUser(input: Prisma.UserWhereUniqueInput) {
         try {
             const user = await prisma.user.findFirst();
-            return {
-                name: user?.name,
-                email: user?.email,
-                role: user?.role,
-            };
-        } catch (error) {
-            return null;
+            return { user };
+        } catch (error: any) {
+            Log.error(error.toString());
+            return { error };
         }
     }
 }

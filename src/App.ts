@@ -9,13 +9,13 @@ import helmet from 'helmet';
 import path from 'path';
 // import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './docs/swagger.json';
+import { expressMiddleware } from '@apollo/server/express4';
 import http from 'http';
 import morgan from 'morgan';
 import GraphqlServer from './graphql/GraphqlServer';
-import { errorHandler } from './middlewares/errorHandler';
+import ErrorHandler from './middlewares/ErrorHandler';
 import UserRoutes from './routes/UserRoutes';
 import Log from './utils/Log';
-import { expressMiddleware } from '@apollo/server/express4';
 
 const LOG_TAG = 'App';
 const morganFormat =
@@ -74,7 +74,10 @@ class App {
         );
 
         this.app.use(UserRoutes.PREFIX_PAT, this.userRoutes.getRouter());
-        this.app.use(errorHandler());
+
+        // handle error
+        this.app.use(ErrorHandler.handleError);
+        this.app.use(ErrorHandler.handleNotFound);
     }
 
     static getInstance() {

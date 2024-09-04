@@ -1,8 +1,9 @@
 /**
  * RootRoutes.ts
  */
+import { checkSchema } from 'express-validator';
 import UserController from '../controllers/UserController';
-import { CreateUserSchema } from '../dto/user/UserDto';
+import { createUserSchema } from '../dto/user/CreateUserDto';
 import BaseRouter from './BaseRouter';
 
 class UserRoutes extends BaseRouter {
@@ -18,11 +19,11 @@ class UserRoutes extends BaseRouter {
     private initializeRoutes() {
         this.router.post(
             '/',
-            CreateUserSchema,
+            checkSchema(createUserSchema),
             this.handleValidationErrors,
             this.userController.createUser.bind(this.userController),
         );
-        this.router.get('/', this.userController.getUser.bind(this.userController));
+        this.router.get('/:name', this.userController.getUser.bind(this.userController));
     }
 }
 

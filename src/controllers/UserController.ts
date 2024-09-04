@@ -3,6 +3,7 @@
  */
 import { Request, Response } from 'express';
 import UserService from '../services/UserService';
+import { Prisma } from '../../prisma/client';
 
 class UserController {
     userService: UserService = new UserService();
@@ -12,27 +13,36 @@ class UserController {
     }
 
     async createUser(req: Request, res: Response) {
-        const user = await this.userService.createUser(req.body);
-        if (typeof user === 'string') {
-            res.status(400).json({ message: user });
-            return;
-        } else if (user === null) {
-            this.sendServerError(res);
-            return;
+        const { user, error } = await this.userService.createUser(req.body);
+        if (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                res.status(400).json({ message: 'this email is already registered.' });
+                return;
+            } else {
+                this.sendServerError(res);
+                return;
+            }
         }
 
-        res.send(user);
+        res.send({
+            name: user?.name,
+            email: user?.email,
+            role: user?.role,
+        });
     }
 
-    async getUser(_req: Request, res: Response) {
-        const user = await this.userService.getUser();
-
-        if (user === null) {
+    async getUser(req: Request, res: Response) {
+        const { user, error } = await this.userService.getUser(req.params.name);
+        if (error) {
             this.sendServerError(res);
             return;
         }
 
-        res.send(user);
+        res.send({
+            name: user?.name,
+            email: user?.email,
+            role: user?.role,
+        });
     }
 }
 

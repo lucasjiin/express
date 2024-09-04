@@ -1,21 +1,13 @@
 /**
  * CreaetUserDto.ts
  */
-import { checkSchema, ParamSchema } from 'express-validator';
 import { Prisma } from '../../../prisma/client';
-import { notEmpty } from '../../utils/paramSchemas';
+import { Schema } from '../../types';
+import { notEmpty } from '../paramSchemas';
 
-// export interface IUserDto {
-//     id: string;
-//     password?: string;
-//     email: string;
-// }
+export type CreateUserDto = Prisma.UserCreateInput;
 
-type CreateUserProps<T> = {
-    [K in keyof T]: ParamSchema;
-};
-
-const createUserProps: CreateUserProps<Prisma.UserCreateInput> = {
+export const createUserSchema: Schema<CreateUserDto> = {
     name: {
         in: ['body'],
         notEmpty,
@@ -40,4 +32,3 @@ const createUserProps: CreateUserProps<Prisma.UserCreateInput> = {
         },
     },
 };
-export const CreateUserSchema = checkSchema(createUserProps);

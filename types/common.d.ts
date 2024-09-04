@@ -1,7 +1,7 @@
 /**
- * app.d.ts
+ * common.d.ts
  */
-type SyntaxError = {
+interface SyntaxError {
     expose?: boolean;
     statusCode?: number;
     status?: number;
