@@ -22,7 +22,7 @@ class UserRepository {
             }
         }
 
-        return { name, email, password };
+        return { name, email, role: Role.USER };
     }
 
     static async getUser() {
