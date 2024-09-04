@@ -55,7 +55,9 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **Generate graphql types**: `yarn graphql-codegen`
 -   **Run demo**: `yarn dev`
 -   **Build**: `yarn build`
--   **Test**: `curl -X GET http://localhost:3000/user && echo ''`
+-   **Test**
+    1. rest api: `curl -X GET http://localhost:3000/user && echo ''`
+    2. graphql: https://studio.apollographql.com/sandbox/explorer
 
 ## Using the TSC Compiler
 
@@ -79,4 +81,4 @@ This project is a template for using Express. It is implemented using a class-ba
     1. **Install PM2**: `npm install -g pm2`
     2. **Start the application with PM2**: `yarn build && yarn start:pm2`
     3. **Delete all PM2 instances**: `pm2 delete all`
-    4. **test**: `for i in $(seq 1 10); do curl -X GET http://localhost:3000/user && echo; done`
+    4. **Test**: `for i in $(seq 1 10); do curl -X GET http://localhost:3000/user && echo; done`
