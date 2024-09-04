@@ -18,15 +18,15 @@ class Log {
         return `${timestamp} [${[process.pid]}][${level}]${message}`;
     });
     private static logger = winston.createLogger({
-        format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), this.format),
+        format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), Log.format),
         transports: [
             new Console({
-                format: combine(colorize(), this.format),
+                format: combine(colorize(), Log.format),
             }),
             new DailyRotateFile({
                 level: 'silly',
                 datePattern: 'YYYY-MM-DD',
-                dirname: this.LOG_DIR,
+                dirname: Log.LOG_DIR,
                 filename: `%DATE%.log`,
                 maxFiles: 30,
                 zippedArchive: true,
@@ -50,31 +50,31 @@ class Log {
     }
 
     static error(...strings: string[]) {
-        this.logger.error(this.getMessage(...strings));
+        Log.logger.error(Log.getMessage(...strings));
     }
 
     static warn(...strings: string[]) {
-        this.logger.warn(this.getMessage(...strings));
+        Log.logger.warn(Log.getMessage(...strings));
     }
 
     static info(...strings: string[]) {
-        this.logger.info(this.getMessage(...strings));
+        Log.logger.info(Log.getMessage(...strings));
     }
 
     static http(...strings: string[]) {
-        this.logger.http(this.getMessage(...strings));
+        Log.logger.http(Log.getMessage(...strings));
     }
 
     static verbose(...strings: string[]) {
-        this.logger.verbose(this.getMessage(...strings));
+        Log.logger.verbose(Log.getMessage(...strings));
     }
 
     static debug(...strings: string[]) {
-        this.logger.debug(this.getMessage(...strings));
+        Log.logger.debug(Log.getMessage(...strings));
     }
 
     static silly(...strings: string[]) {
-        this.logger.silly(this.getMessage(...strings));
+        Log.logger.silly(Log.getMessage(...strings));
     }
 }
 

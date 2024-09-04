@@ -4,6 +4,7 @@
 import pluginJs from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
+import path from 'path';
 import tseslint from 'typescript-eslint';
 
 export default [
@@ -13,6 +14,12 @@ export default [
     ...tseslint.configs.recommended,
     eslintPluginPrettierRecommended,
     {
+        languageOptions: {
+            parserOptions: {
+                project: 'tsconfig.json',
+                tsconfigRootDir: path.resolve(),
+            },
+        },
         rules: {
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/no-unused-vars': 'warn',

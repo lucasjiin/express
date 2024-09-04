@@ -9,10 +9,13 @@ import helmet from 'helmet';
 import path from 'path';
 // import swaggerUi from 'swagger-ui-express';
 // import swaggerDocument from './docs/swagger.json';
+import http from 'http';
 import morgan from 'morgan';
+import GraphqlServer from './graphql/GraphqlServer';
 import { errorHandler } from './middlewares/errorHandler';
 import UserRoutes from './routes/UserRoutes';
 import Log from './utils/Log';
+import { expressMiddleware } from '@apollo/server/express4';
 
 const LOG_TAG = 'App';
 const morganFormat =
@@ -24,6 +27,9 @@ class App {
     static PORT = process.env.PORT ?? 3000;
 
     private app = express();
+    private server = http.createServer(this.app);
+
+    private gqlServer = GraphqlServer.getInstance(this.server);
 
     private userRoutes = new UserRoutes();
 
@@ -31,11 +37,16 @@ class App {
         this.initialize();
     }
 
-    private initialize() {
+    private async initialize() {
+        await this.gqlServer.start();
+
         this.app.use(
             morgan(morganFormat, {
                 stream: {
                     write: (message) => {
+                        if (message.includes('POST /api')) {
+                            return;
+                        }
                         Log.info(LOG_TAG, message);
                     },
                 },
@@ -55,6 +66,13 @@ class App {
         );
         this.app.use('/', express.static(path.join(__dirname, '../public')));
         // this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        this.app.use(
+            '/api',
+            expressMiddleware(this.gqlServer, {
+                context: async ({ req }) => ({ token: req.headers.token }),
+            }),
+        );
+
         this.app.use(UserRoutes.PREFIX_PAT, this.userRoutes.getRouter());
         this.app.use(errorHandler());
     }

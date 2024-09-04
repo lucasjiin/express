@@ -10,9 +10,12 @@
         "clean": "rm -rf ./dist",
         "lint": "eslint \"src/**/*.ts\"",
         "format": "prettier --config prettier.config.cli.mjs --write .",
+        "graphql-codegen": "graphql-codegen && swc graphql -d ./",
         "api-docs": "swagger-cli bundle docs/openapi.yaml --outfile ./docs/swagger.yaml --type yaml --verbose"
     },
     "dependencies": {
+        "@apollo/server": "^4.11.0",
+        "@graphql-tools/load-files": "^7.0.0",
         "@prisma/client": "5.19.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
@@ -20,6 +23,7 @@
         "express": "^4.19.2",
         "express-session": "^1.18.0",
         "express-validator": "^7.2.0",
+        "graphql": "^16.9.0",
         "helmet": "^7.1.0",
         "morgan": "^1.10.0",
         "swagger-ui-express": "^5.0.1",
@@ -28,6 +32,9 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.9.1",
+        "@graphql-codegen/cli": "^5.0.2",
+        "@graphql-codegen/typescript": "^4.0.9",
+        "@graphql-codegen/typescript-resolvers": "^4.2.1",
         "@swc/cli": "^0.4.0",
         "@swc/core": "^1.7.22",
         "@types/cookie-parser": "^1.4.7",

@@ -5,9 +5,7 @@ import { Prisma, Role } from '../../prisma/client';
 import { prisma } from './connections';
 
 class UserRepository {
-    prisma = prisma;
-
-    async createUser(user: Prisma.UserCreateInput) {
+    static async createUser(user: Prisma.UserCreateInput) {
         const { name, password, email } = user;
 
         try {
@@ -19,19 +17,25 @@ class UserRepository {
                 if (error.code === 'P2002') {
                     return 'this email is already registered.';
                 }
+            } else {
+                return null;
             }
-            return null;
         }
 
         return { name, email, password };
     }
 
-    getUser() {
-        return {
-            name: 'test123',
-            email: 'test123@gmail.com',
-            role: Role.USER,
-        };
+    static async getUser() {
+        try {
+            const user = await prisma.user.findFirst();
+            return {
+                name: user?.name,
+                email: user?.email,
+                role: user?.role,
+            };
+        } catch (error) {
+            return null;
+        }
     }
 }
 

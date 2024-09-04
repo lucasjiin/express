@@ -8,6 +8,7 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **controllers**: Handles client requests
 -   **docs**: Documentation for Swagger (currently not implemented)
 -   **dto**: Defines and validates client request data
+-   **graphql**: Provides Apollo Server and resolver definitions for GraphQL operations
 -   **middlewares**: Middleware functions
 -   **repositories**: DAO collections for interacting with the database
 -   **routes**: Route path configurations
@@ -22,6 +23,7 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **prettier**: For code formatting
 -   **typescript**: For type checking and modern JavaScript features
 -   **swc**: For compiling
+-   **graphql-codegen**: For generate types from graphql schema;
 
 ### Runtime
 
@@ -32,12 +34,13 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **cluster**: Used for load balancing across multiple CPU cores
 -   **winston, morgan**: Logging
 -   **prisma**: DB ORM
+-   **apollo-server**: Graphql operation handling
 
 ## Usage
 
 -   **Prerequisites**
     -   **Database Setup**
-        - You need to have a database configured for the project. If you don't have one, remove all Prisma-related code.
+        -   You need to have a database configured for the project. If you don't have one, remove all Prisma-related code.
         1. Modify the database URL in .env to match your environment.
         2. Initialize Prisma - npx prisma init
         3. Change to below to the schema.prisma file that is automatically generated.
@@ -49,11 +52,13 @@ This project is a template for using Express. It is implemented using a class-ba
             ```
         4. Create Prisma tables - npx prisma db push
 -   **Install packages**: `yarn`
+-   **Generate graphql types**: `yarn graphql-codegen`
 -   **Run demo**: `yarn dev`
 -   **Build**: `yarn build`
 -   **Test**: `curl -X GET http://localhost:3000/user && echo ''`
 
 ## Using the TSC Compiler
+
 -   **To use the tsc compiler with watch mode, follow the steps below**
     1. **Install tsc-watch**: `yarn add -D tsc-watch`
     2. **Modify package.json scripts**
@@ -69,7 +74,9 @@ This project is a template for using Express. It is implemented using a class-ba
         ```
 
 ## Using PM2 for Clustering
- - **To run the application in a cluster using PM2, follow these steps**
+
+-   **To run the application in a cluster using PM2, follow these steps**
     1. **Install PM2**: `npm install -g pm2`
     2. **Start the application with PM2**: `yarn build && yarn start:pm2`
-    2. **Delete all PM2 instances**: `pm2 delete all`
+    3. **Delete all PM2 instances**: `pm2 delete all`
+    4. **test**: `for i in $(seq 1 10); do curl -X GET http://localhost:3000/user && echo; done`

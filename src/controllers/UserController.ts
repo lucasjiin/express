@@ -12,13 +12,23 @@ class UserController {
         if (typeof user === 'string') {
             res.status(400).json({ message: user });
             return;
+        } else if (user === null) {
+            res.status(500).json({ message: 'internal server error' });
+            return;
         }
 
         res.send(user);
     }
 
-    getUser(_req: Request, res: Response) {
-        res.send(this.userService.getUser());
+    async getUser(_req: Request, res: Response) {
+        const user = await this.userService.getUser();
+
+        if (user === null) {
+            res.status(500).json({ message: 'internal server error' });
+            return;
+        }
+
+        res.send(user);
     }
 }
 

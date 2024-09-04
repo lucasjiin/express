@@ -1,0 +1,16 @@
+enum Role {
+    USER
+    ADMIN
+}
+
+type User {
+    id: String
+    password: String
+    name: String
+    email: String
+    role: Role
+}
+
+type Query {
+    user: User
+}

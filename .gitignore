@@ -4,3 +4,13 @@
 
 # log
 /logs
+
+# package lock
+bun.lockb
+
+# auto generated graphql types
+graphql/resolvers.ts
+graphql/resolvers.js
+
+# auto generated prisma libs
+prisma/client
