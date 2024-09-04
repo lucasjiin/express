@@ -6,10 +6,10 @@ import UserService from '../services/UserService';
 import { Prisma } from '../../prisma/client';
 
 class UserController {
-    userService: UserService = new UserService();
+    userService: UserService = UserService.getInstance();
 
     private sendServerError(res: Response) {
-        res.status(500).json({ message: 'internal server error' });
+        res.status(500).send('Internal server error');
     }
 
     async createUser(req: Request, res: Response) {

@@ -4,11 +4,16 @@ enum Role {
 }
 
 type User {
-    id: String
-    password: String
     name: String
     email: String
     role: Role
+}
+
+type UserWithPassword  {
+    name: String
+    email: String
+    role: Role
+    password: String
 }
 
 type Query {

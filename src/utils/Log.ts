@@ -13,11 +13,11 @@ const { Console, DailyRotateFile } = winston.transports;
  * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
  */
 class Log {
-    private static LOG_DIR = path.join(__dirname, '../../logs');
-    private static format = printf(({ level, message, timestamp }) => {
+    private static readonly LOG_DIR = path.join(__dirname, '../../logs');
+    private static readonly format = printf(({ level, message, timestamp }) => {
         return `${timestamp} [${[process.pid]}][${level}]${message}`;
     });
-    private static logger = winston.createLogger({
+    private static readonly logger = winston.createLogger({
         format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), Log.format),
         transports: [
             new Console({
@@ -26,7 +26,7 @@ class Log {
             new DailyRotateFile({
                 level: 'silly',
                 datePattern: 'YYYY-MM-DD',
-                dirname: Log.LOG_DIR,
+                dirname: this.LOG_DIR,
                 filename: `%DATE%.log`,
                 maxFiles: 30,
                 zippedArchive: true,

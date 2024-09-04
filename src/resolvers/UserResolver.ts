@@ -12,17 +12,19 @@ import {
     ResolverTypeWrapper,
     Role,
     User,
-} from '../../../graphql/resolvers';
-import UserRepository from '../../repositories/UserRepository';
+} from '../../graphql/resolvers';
+import UserService from '../services/UserService';
 
-class UserQueryResolver implements QueryResolvers {
-    user: Resolver<
-        Maybe<ResolverTypeWrapper<User>>,
-        Record<string, never>,
-        any,
-        RequireFields<QueryUserArgs, 'name'>
-    > = async (_parent, args /* , _context, _info */) => {
-        const { user, error } = await UserRepository.getUser({ name: args.name });
+type QueryResolverFnUser = Resolver<
+    Maybe<ResolverTypeWrapper<User>>,
+    Record<string, never>,
+    any,
+    RequireFields<QueryUserArgs, 'name'>
+>;
+
+class Query implements QueryResolvers {
+    user: QueryResolverFnUser = async (_parent, args /* , _context, _info */) => {
+        const { user, error } = await UserService.getInstance().getUser(args.name);
 
         if (error) {
             const gqlerror = new GraphQLError('internal server error', {
@@ -43,7 +45,7 @@ class UserQueryResolver implements QueryResolvers {
 }
 
 class UserResolver implements Resolvers {
-    Query: QueryResolvers = new UserQueryResolver();
+    Query: QueryResolvers = new Query();
 }
 
 export default UserResolver;

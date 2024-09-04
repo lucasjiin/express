@@ -7,7 +7,7 @@ import { createUserSchema } from '../dto/user/CreateUserDto';
 import BaseRouter from './BaseRouter';
 
 class UserRoutes extends BaseRouter {
-    static PREFIX_PAT = '/user';
+    static PREFIX_PATH = '/user';
 
     private userController = new UserController();
 

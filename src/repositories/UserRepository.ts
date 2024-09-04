@@ -1,7 +1,7 @@
 /**
  *
  */
-import { Prisma, Role } from '../../prisma/client';
+import { Prisma } from '../../prisma/client';
 import Log from '../utils/Log';
 import { prisma } from './connections';
 
@@ -23,7 +23,11 @@ class UserRepository {
 
     static async getUser(input: Prisma.UserWhereUniqueInput) {
         try {
-            const user = await prisma.user.findFirst();
+            const user = await prisma.user.findUnique({
+                where: {
+                    name: input.name,
+                },
+            });
             return { user };
         } catch (error: any) {
             Log.error(error.toString());
