@@ -3,14 +3,15 @@
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
-        "dev": "nodemon --watch src -e ts --exec \"npm run lint && npm run build && node dist/main.js\"",
-        "build": "rm -rf dist && swc src -d dist --strip-leading-paths",
+        "dev": "nodemon --watch src -e ts --exec \"bun run ./src/main.ts\"",
+        "dev:lint": "nodemon --watch src -e ts --exec \"bun run lint && bun run ./src/main.ts\"",
+        "build": "rm -rf dist && npx prisma generate && bun graphql-codegen && bun run format && bun run lint && tsc",
         "start": "node dist/main.js",
         "start:pm2": "pm2 flush && sleep 1 && pm2 delete all; pm2 start -i max dist/main.js",
         "clean": "rm -rf ./dist",
         "lint": "eslint \"src/**/*.ts\"",
         "format": "prettier --config prettier.config.cli.mjs --write .",
-        "graphql-codegen": "graphql-codegen && swc graphql -d ./",
+        "graphql-codegen": "graphql-codegen",
         "api-docs": "swagger-cli bundle docs/openapi.yaml --outfile ./docs/swagger.yaml --type yaml --verbose"
     },
     "dependencies": {
@@ -39,8 +40,6 @@
         "@graphql-codegen/cli": "^5.0.2",
         "@graphql-codegen/typescript": "^4.0.9",
         "@graphql-codegen/typescript-resolvers": "^4.2.1",
-        "@swc/cli": "^0.4.0",
-        "@swc/core": "^1.7.22",
         "@types/bcryptjs": "^2.4.6",
         "@types/cookie-parser": "^1.4.7",
         "@types/cors": "^2.8.17",

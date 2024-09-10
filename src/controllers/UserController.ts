@@ -2,8 +2,8 @@
  * MainController.ts
  */
 import { Request, Response } from 'express';
-import UserService from '../services/UserService';
 import { Prisma } from '../../prisma/client';
+import UserService from '../services/UserService';
 
 class UserController {
     userService: UserService = UserService.getInstance();

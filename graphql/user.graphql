@@ -9,7 +9,7 @@ type User {
     role: Role
 }
 
-type UserWithPassword  {
+type UserWithPassword {
     name: String
     email: String
     role: Role

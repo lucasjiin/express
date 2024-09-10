@@ -22,7 +22,7 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **eslint**: For code linting
 -   **prettier**: For code formatting
 -   **typescript**: For type checking and modern JavaScript features
--   **swc**: For compiling
+-   **bun js**: For package manager and running ts
 -   **graphql-codegen**: For generate types from graphql schema;
 
 ### Runtime
@@ -39,6 +39,8 @@ This project is a template for using Express. It is implemented using a class-ba
 ## Usage
 
 -   **Prerequisites**
+    -   **Bun js Install**
+        -   curl -fsSL https://bun.sh/install | bash
     -   **Database Setup**
         -   You need to have a database configured for the project. If you don't have one, remove all Prisma-related code.
         1. Modify the database URL in .env to match your environment.
@@ -51,29 +53,14 @@ This project is a template for using Express. It is implemented using a class-ba
             }
             ```
         4. Create Prisma tables - npx prisma db push
--   **Install packages**: `yarn`
--   **Generate graphql types**: `yarn graphql-codegen`
--   **Run demo**: `yarn dev`
--   **Build**: `yarn build`
+-   **Install packages**: `bun run intsall`
+-   **Generate graphql types**: `bun graphql-codegen`
+-   **Generate prisma client**: `npx prisma generate`
+-   **Run demo**: `bun run dev`
+-   **Build**: `bun run build`
 -   **Test**
     1. rest api: `curl -X GET http://localhost:3000/user && echo ''`
     2. graphql: https://studio.apollographql.com/sandbox/explorer
-
-## Using the TSC Compiler
-
--   **To use the tsc compiler with watch mode, follow the steps below**
-    1. **Install tsc-watch**: `yarn add -D tsc-watch`
-    2. **Modify package.json scripts**
-        ```json
-        "scripts": {
-            .....
-            "dev": "tsc-watch --onSuccess \"npm run start\"",
-            "dev:lint": "tsc-watch --onSuccess \"npm run start:lint\"",
-            "start": "node dist/main.js",
-            "start:lint": "npm run lint && node dist/main.js",
-            .....
-        }
-        ```
 
 ## Using PM2 for Clustering
 

@@ -1,9 +1,9 @@
 /**
  * AppService.ts
  */
+import * as bcrypt from 'bcryptjs';
 import { Prisma } from '../../prisma/client';
 import UserRepository from '../repositories/UserRepository';
-import * as bcrypt from 'bcryptjs';
 
 class UserService {
     private static instance: UserService | null = null;
