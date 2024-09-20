@@ -25,4 +25,6 @@ model User {
     name     String @unique
     email    String @unique
     role     Role   @default(USER)
+
+    @@map("user")
 }

@@ -9,7 +9,11 @@ import App from './App';
 
 function bootstrap() {
     let cpuNum: number | string = 1;
-    dotenv.config({ path: path.join(__dirname, '../.env') });
+    dotenv.config({
+        path: [path.join(__dirname, '../.env'), path.join(__dirname, '../.env.dev')],
+        override: true,
+    });
+
     cpuNum = process.env.INSTANCES_NUM ?? cpus().length;
 
     if (cluster.isPrimary) {

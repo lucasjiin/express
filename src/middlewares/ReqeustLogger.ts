@@ -12,7 +12,7 @@ class ReqeustLogger {
         return morgan(ReqeustLogger.FORMAT, {
             stream: {
                 write: (message) => {
-                    Log.info('express', message);
+                    Log.info('express', message.trim());
                 },
             },
         });

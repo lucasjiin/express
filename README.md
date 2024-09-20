@@ -1,12 +1,12 @@
 # Project Overview
 
-This project is a template for using Express. It is implemented using a class-based, object-oriented approach.
+This project is a template for using Express.
+It contains sample code for using various tools.
 
 ## Project Structure
 
 -   **constants**: Constants used throughout the project
 -   **controllers**: Handles client requests
--   **docs**: Documentation for Swagger (currently not implemented)
 -   **dto**: Defines and validates client request data
 -   **graphql**: Provides Apollo Server and resolver definitions for GraphQL operations
 -   **middlewares**: Middleware functions
@@ -23,12 +23,13 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **prettier**: For code formatting
 -   **typescript**: For type checking and modern JavaScript features
 -   **bun js**: For package manager and running ts
--   **graphql-codegen**: For generate types from graphql schema;
+-   **graphql-codegen**: For generate types from graphql schema
+-   **apidoc**: For documentation of rest api
 
 ### Runtime
 
 -   **express**: Web framework for Node.js
--   **express-validator**: Middleware for validating and sanitizing request data
+-   **zod**: Middleware for validating data
 -   **helmet**: Security middleware for Express to set various HTTP headers
 -   **dotenv**: Loads environment variables from a `.env` file into `process.env`
 -   **cluster**: Used for load balancing across multiple CPU cores
@@ -56,11 +57,12 @@ This project is a template for using Express. It is implemented using a class-ba
 -   **Install packages**: `bun run intsall`
 -   **Generate graphql types**: `bun graphql-codegen`
 -   **Generate prisma client**: `npx prisma generate`
+-   **Generate api docs**: `bun run apidoc`
 -   **Run demo**: `bun run dev`
 -   **Build**: `bun run build`
 -   **Test**
-    1. rest api: `curl -X GET http://localhost:3000/user && echo ''`
-    2. graphql: https://studio.apollographql.com/sandbox/explorer
+    1. rest api: http://localhost:3000/docs
+    2. graphql: http://localhost:3000/api
 
 ## Using PM2 for Clustering
 

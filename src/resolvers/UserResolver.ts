@@ -27,7 +27,7 @@ class Query implements QueryResolvers {
         const { user, error } = await UserService.getInstance().getUser(args.name);
 
         if (error) {
-            const gqlerror = new GraphQLError('internal server error', {
+            const gqlerror = new GraphQLError('Internal server error', {
                 extensions: {
                     code: 500,
                 },

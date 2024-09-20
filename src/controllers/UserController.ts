@@ -4,27 +4,26 @@
 import { Request, Response } from 'express';
 import { Prisma } from '../../prisma/client';
 import UserService from '../services/UserService';
+import { StatusCodes } from 'http-status-codes';
 
 class UserController {
     userService: UserService = UserService.getInstance();
-
-    private sendServerError(res: Response) {
-        res.status(500).send('Internal server error');
-    }
 
     async createUser(req: Request, res: Response) {
         const { user, error } = await this.userService.createUser(req.body);
         if (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                res.status(400).json({ message: 'this email is already registered.' });
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: 'this email is already registered.',
+                });
                 return;
             } else {
-                this.sendServerError(res);
+                res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
                 return;
             }
         }
 
-        res.send({
+        res.status(StatusCodes.CREATED).send({
             name: user?.name,
             email: user?.email,
             role: user?.role,
@@ -34,7 +33,7 @@ class UserController {
     async getUser(req: Request, res: Response) {
         const { user, error } = await this.userService.getUser(req.params.name);
         if (error) {
-            this.sendServerError(res);
+            res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
             return;
         }
 
