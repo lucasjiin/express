@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 const LOG_TAG = 'testController'; // eslint-disable-line
 
 function create(req: Request, res: Response): void {
-//   const data = req.body as TestDto;
+  //   const data = req.body as TestDto;
   res.send('success');
 }
 
