@@ -1,78 +1,95 @@
 /**
  * App.ts
  */
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
-import http from 'http';
+
+import { rootPath, WEB_PORT } from './configs/environments.js';
+import { sessionOptions } from './configs/serverOptions.js';
+// import swaggerSpec from './configs/swagger/swaggerOptions.js';
+// import { checkAuth } from './middlewares/checkLogin.js';
+import { handleErrors, handleJsonParseError, handleNotFound } from './middlewares/errorHandler.js';
+import { createAccessLog } from './utils/accessLog.js';
+import log from './utils/log.js';
 import path from 'path';
-// import swaggerUi from 'swagger-ui-express';
-import { getApolloServerOptions, getHelmetOptions, getSessionOptions } from './configuration';
-// import swaggerDocument from './docs/swagger.json';
-import ErrorHandler from './middlewares/ErrorHandler';
-import ReqeustLogger from './middlewares/ReqeustLogger';
-import UserRoutes from './routes/UserRoutes';
-import Log from './utils/Log';
 
 const LOG_TAG = 'App';
 
-class App {
-    private static instance: App | null = null;
-    static readonly PORT = process.env.PORT ?? 3000;
+const app = express();
 
-    private app = express();
-    private server = http.createServer(this.app);
+function init() {
+  //   const { default: swaggerUiExpress } = await import('swagger-ui-express');
 
-    private gqlServer = new ApolloServer(getApolloServerOptions(this.server));
+  // Middleware setup
+  app.use(createAccessLog());
+  app.use(cors());
+  app.use(helmet());
+  app.use(session(sessionOptions));
+  app.use(express.json(), handleJsonParseError);
+  app.use(cookieParser());
+  //   app.use(
+  //     '/api-docs',
+  //     swaggerUiExpress.serve,
+  //     swaggerUiExpress.setup(swaggerSpec, {
+  //       // explorer: true,
+  //       customCss: '.swagger-ui .topbar { display: none }',
+  //       customSiteTitle: 'Intellilab API Documentation',
+  //       swaggerOptions: {
+  //         displayRequestDuration: true,
+  //         persistAuthorization: true,
+  //       },
+  //     })
+  //   );
 
-    private userRoutes = new UserRoutes();
+  //   app.get('/api-docs.json', (req, res) => {
+  //     res.setHeader('Content-Type', 'application/json');
+  //     res.send(swaggerSpec);
+  //   });
 
-    private constructor() {
-        this.initialize();
-    }
+  // Initialize routes
+  // app.use(testRoutes.PREFIX_PATH, testRoutes.router);
+  //   app.use(authRoutes.PREFIX_PATH, authRoutes.router);
+  //   app.use(imaginiRoutes.PREFIX_PATH, imaginiRoutes.router);
+  //   app.use('/api', checkAuth);
+  //   app.use(databaseRoutes.PREFIX_PATH, databaseRoutes.router);
+  //   app.use(storageRoutes.PREFIX_PATH, storageRoutes.router);
+  //   app.use(variablesRoutes.PREFIX_PATH, variablesRoutes.router);
 
-    private async initialize() {
-        await this.gqlServer.start();
+  app.get('/', (req, res) => {
+    res.send('HOME');
+  });
+  app.use('/', express.static(path.join(rootPath, 'public')));
 
-        this.app.use(ReqeustLogger.log());
-        this.app.use(cors());
-        this.app.use(helmet(getHelmetOptions()));
-        this.app.use(express.json(), ErrorHandler.handleJsonParseError);
-        this.app.use(cookieParser());
-        this.app.use(session(getSessionOptions()));
-        this.app.use('/', express.static(path.join(__dirname, '../public')));
-        // this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-        this.app.use(
-            '/api',
-            expressMiddleware(this.gqlServer, {
-                context: async (context) => context,
-            }),
-        );
-
-        this.app.use(UserRoutes.PREFIX_PATH, this.userRoutes.getRouter());
-
-        // handle error
-        this.app.use(ErrorHandler.handleNotFound);
-        this.app.use(ErrorHandler.handleErrors);
-    }
-
-    static getInstance() {
-        if (!App.instance) {
-            App.instance = new App();
-        }
-
-        return App.instance;
-    }
-
-    listen() {
-        this.app.listen(App.PORT, () => {
-            Log.info(LOG_TAG, `listening on port ${App.PORT}`);
-        });
-    }
+  // Error handling
+  app.use(handleNotFound);
+  app.use(handleErrors);
 }
 
-export default App;
+function startServer(): void {
+  const server = app.listen(WEB_PORT, () => {
+    log.info(LOG_TAG, `Server successfully started on port`, WEB_PORT);
+  });
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    log.error(LOG_TAG, 'Server error occurred:', err.code ?? '-1', err.message);
+
+    if (err.code === 'EADDRINUSE') {
+      log.error(LOG_TAG, `Port ${WEB_PORT} is already in use!`);
+      log.error(LOG_TAG, 'Try using a different port or stop the process using this port');
+      log.error(LOG_TAG, `To find process: lsof -i :${WEB_PORT}`);
+    } else if (err.code === 'EACCES') {
+      log.error(LOG_TAG, `Permission denied to bind to port ${WEB_PORT}`);
+      log.error(LOG_TAG, 'Try using a port number > 1024 or run with sudo');
+    }
+
+    process.exit(1);
+  });
+}
+
+init();
+
+export default app;
+export { startServer };
