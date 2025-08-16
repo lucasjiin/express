@@ -6,7 +6,7 @@ import { DataSource } from 'typeorm';
 import { dbInfo } from '../configs/environments.js';
 import Test from '../models/Test.js';
 
-const LOG_TAG = 'appDataSource'; // eslint-disable-line
+const LOG_TAG = 'appDataSource';  // eslint-disable-line
 
 let dataSource: DataSource | null = null;
 

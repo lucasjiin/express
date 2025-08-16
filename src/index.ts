@@ -3,8 +3,8 @@
  */
 import 'reflect-metadata';
 
-import './configs/environments.js';
 import { startServer } from './App.js';
+import './configs/environments.js';
 import log from './utils/log.js';
 
 function bootstrap(): void {

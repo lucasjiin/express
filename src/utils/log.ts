@@ -6,6 +6,7 @@
 import path from 'path';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
+
 import { rootPath } from '../configs/environments.js';
 
 const { colorize, combine, printf, timestamp } = winston.format;
