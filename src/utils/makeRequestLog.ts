@@ -1,13 +1,13 @@
 /**
- * accessLog.ts
+ * makeRequestLog.ts
  */
 import morgan from 'morgan';
 
-import log from './log.js';
+import log from './Log.js';
 
 const FORMAT = ':remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] :referrer :user-agent - :response-time ms';
 
-export function createAccessLog() {
+export function makeRequestLog() {
   return morgan(FORMAT, {
     stream: {
       write: (message) => {

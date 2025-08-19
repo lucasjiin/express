@@ -3,13 +3,11 @@
  */
 import session from 'express-session';
 
-const SESSION_SECRET = process.env.SESSION_SECRET ?? '@node-expres1324!';
+import { SESSION_SECRET } from './environments.js';
 
-const sessionOptions: session.SessionOptions = {
+export const sessionOptions: session.SessionOptions = {
   cookie: { httpOnly: true },
   resave: false,
   saveUninitialized: true,
   secret: SESSION_SECRET,
 };
-
-export { sessionOptions };

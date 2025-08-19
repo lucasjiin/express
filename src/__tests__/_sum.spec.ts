@@ -1,7 +1,7 @@
 // sum.spec.ts
 import { describe, expect, it } from 'vitest';
 
-import { sum } from '../utils/sum.js';
+import { sum } from '../utils/_sum.js';
 
 describe('sum function', () => {
   it('should add two positive numbers correctly', () => {

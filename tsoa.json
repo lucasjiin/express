@@ -1,0 +1,24 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "src/configs",
+    "specVersion": 3,
+    "schemes": ["http"],
+    "name": "Express Template API",
+    "description": "API documentation",
+    "version": "1.0.0",
+    "host": "192.168.219.104:3000",
+    "securityDefinitions": {
+      "dej": {
+        "description": "check profile"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "src/routes",
+    "esm": true,
+    "authenticationModule": "./src/auth/authentication.ts"
+  }
+}

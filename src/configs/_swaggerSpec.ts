@@ -4,7 +4,6 @@
 import path from 'path';
 import swaggerJSDoc from 'swagger-jsdoc';
 
-import { testDataSchema } from '../dto/TestDto.js';
 import { getServerIpAddresses } from '../utils/commonUtils.js';
 import { rootPath, WEB_PORT } from './environments.js';
 
@@ -24,9 +23,6 @@ const swaggerOptions: swaggerJSDoc.Options = {
   apis: [path.join(rootPath, './src/routes/*.ts')],
   definition: {
     components: {
-      schemas: {
-        TestData: testDataSchema,
-      },
       // securitySchemes: {
       //   cookieAuth: {
       //     description: 'Session cookie for authentication',

@@ -1,17 +1,16 @@
 /**
- * appDataSource.ts
+ * AppDataSource.ts
  */
 import { DataSource } from 'typeorm';
 
 import { dbInfo } from '../configs/environments.js';
 import Test from '../models/Test.js';
+import Log from '../utils/Log.js';
 
-const LOG_TAG = 'appDataSource'; // eslint-disable-line
+const LOG_TAG = 'AppDataSource'; // eslint-disable-line
 
-let dataSource: DataSource | null = null;
-
-async function init(): Promise<void> {
-  dataSource = new DataSource({
+class AppDataSource {
+  public dataSource = new DataSource({
     database: dbInfo.name,
     entities: [Test],
     host: dbInfo.host,
@@ -23,12 +22,13 @@ async function init(): Promise<void> {
     username: dbInfo.username,
   });
 
-  await dataSource.initialize();
+  public async init(): Promise<void> {
+    try {
+      await this.dataSource.initialize();
+    } catch (error) {
+      Log.error('Error during Data Source initialization', error);
+    }
+  }
 }
 
-const appDataSource = {
-  dataSource,
-  init,
-};
-
-export default appDataSource;
+export default AppDataSource;

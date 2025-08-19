@@ -9,9 +9,9 @@
   "main": "index.ts",
   "module": "dist/index.js",
   "scripts": {
-    "dev": "tsx --watch --env-file .env src/index.ts",
+    "dev": "npx tsoa spec-and-routes && tsx --watch --env-file .env src/index.ts",
     "start": "node --env-file .env dist/index.js",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npx tsoa spec-and-routes && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -37,6 +37,8 @@
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.6.0",
+    "typedi": "^0.10.0",
     "typeorm": "^0.3.25",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"

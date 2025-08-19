@@ -3,15 +3,16 @@
  */
 import 'reflect-metadata';
 
-import { startServer } from './App.js';
 import './configs/environments.js';
-import log from './utils/log.js';
+import App from './App.js';
+import Log from './utils/Log.js';
 
 function bootstrap(): void {
-  startServer();
+  App.init();
+  App.startServer();
 
   process.on('exit', (code) => {
-    log.error('Process exiting with code:', code);
+    Log.error('Process exiting with code:', code);
   });
 
   // process.on('SIGINT', () => {
